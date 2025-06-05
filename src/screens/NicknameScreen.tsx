@@ -22,7 +22,7 @@ export default function NicknameScreen({ onComplete }: { onComplete: () => void 
       } else {
         // Generate UUID if not stored
         if (!savedUUID) {
-          const newUUID = uuid.v4().toString();
+          const newUUID = uuid.v4();
           await AsyncStorage.setItem(STORAGE_KEY_UUID, newUUID);
         }
       }
