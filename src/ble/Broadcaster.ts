@@ -28,6 +28,7 @@ export async function startBroadcasting() {
   const payload = `${nickname}:${uuid}`.slice(0, 26); // Keep under 26 chars for BLE limit
 
   console.log('uuid ----- ', uuid);
+  
   BleAdvertiser.setCompanyId(MANUFACTURER_ID);
   BleAdvertiser.broadcast(uuid, [BleAdvertiser.ADVERTISE_MODE_BALANCED], {
     includeDeviceName: false,
