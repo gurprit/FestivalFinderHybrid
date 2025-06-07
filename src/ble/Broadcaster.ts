@@ -1,4 +1,5 @@
 // src/ble/Broadcaster.ts
+import { Buffer } from 'buffer';
 import BleAdvertiser from 'react-native-ble-advertiser';
 import { Platform, PermissionsAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,15 +27,17 @@ export async function startBroadcasting() {
   }
 
   const payload = `${nickname}:${uuid}`.slice(0, 26); // Keep under 26 chars for BLE limit
+  const payloadBase64 = Buffer.from(payload).toString('base64');
 
   console.log('uuid ----- ', uuid);
   
-  BleAdvertiser.setCompanyId(MANUFACTURER_ID);
+  BleAdvertiser.setCompanyId(MANUFACTURER_ID); // Ensure company ID is set
   BleAdvertiser.broadcast(uuid, [BleAdvertiser.ADVERTISE_MODE_BALANCED], {
+    manufacturerData: payloadBase64, // Pass payload as base64
     includeDeviceName: false,
     includeTxPowerLevel: false,
   })
-    .then(() => console.log('Broadcasting:', payload))
+    .then(() => console.log('Broadcasting:', payload, 'as Base64:', payloadBase64))
     .catch((err) => console.error('Broadcast error:', err));
 }
 
