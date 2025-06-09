@@ -4,7 +4,14 @@ import { PermissionsAndroid, Platform } from 'react-native';
 
 const bleManager = new BleManager();
 
-export async function startScanning(onDeviceFound: (nickname: string, uuid: string) => void) {
+export async function startScanning(
+  onDeviceFound: (data: {
+    nickname: string;
+    uuid: string;
+    rawData: string;
+    timestamp: number;
+  }) => void
+  ) {
   if (Platform.OS === 'android' && Platform.Version >= 23) {
     const granted = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -36,7 +43,12 @@ export async function startScanning(onDeviceFound: (nickname: string, uuid: stri
         if (payload.includes(':')) {
           const [nickname, uuid] = payload.split(':');
           console.log('Found device:', nickname, uuid);
-          onDeviceFound(nickname, uuid);
+          onDeviceFound({
+            nickname,
+            uuid,
+            rawData: manufacturerData,
+            timestamp: Date.now(),
+          });
         }
       } catch (e) {
         console.error('Parse error:', e);

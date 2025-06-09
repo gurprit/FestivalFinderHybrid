@@ -11,7 +11,10 @@ export async function startBroadcasting() {
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADVERTISE,
     ]);
 
-    if (granted['android.permission.BLUETOOTH_ADVERTISE'] !== PermissionsAndroid.RESULTS.GRANTED) {
+    if (
+      granted['android.permission.BLUETOOTH_ADVERTISE'] !==
+      PermissionsAndroid.RESULTS.GRANTED
+    ) {
       console.warn('BLUETOOTH_ADVERTISE permission not granted');
       return;
     }
@@ -25,18 +28,20 @@ export async function startBroadcasting() {
     return;
   }
 
-  const payload = `${nickname}:${uuid}`.slice(0, 26); // Keep under 26 chars for BLE limit
+  const payload = `${nickname}:${uuid}`.slice(0, 26); // BLE safe length
 
-  console.log('uuid ----- ', uuid);
-  
+  console.log('🔊 Broadcasting payload:', payload);
+
   BleAdvertiser.setCompanyId(MANUFACTURER_ID);
-  BleAdvertiser.broadcast(uuid, [BleAdvertiser.ADVERTISE_MODE_BALANCED], {
+
+  BleAdvertiser.broadcast(payload, BleAdvertiser.ADVERTISE_MODE_BALANCED, {
     includeDeviceName: false,
     includeTxPowerLevel: false,
   })
-    .then(() => console.log('Broadcasting:', payload))
-    .catch((err) => console.error('Broadcast error:', err));
+    .then(() => console.log('✅ Advertising started'))
+    .catch((err) => console.error('❌ Advertising failed:', err));
 }
+
 
 export function stopBroadcasting() {
   BleAdvertiser.stopBroadcast()
