@@ -1,27 +1,34 @@
-// TestAdvertiserScreen.tsx
+///src/screens/TestAdvertiserScreen.tsx
+
 import React, { useEffect, useState } from 'react';
-import { View, Text, ToastAndroid } from 'react-native';
+import { View, Text, ToastAndroid, Button } from 'react-native';
 import { startBroadcasting, stopBroadcasting } from '../ble/Broadcaster';
 
 export default function TestAdvertiserScreen() {
-  const [status, setStatus] = useState('Starting...');
+  const [status, setStatus] = useState('⏳ Starting...');
+const nickname = 'T1';
+const uuid = 'U1';
 
   useEffect(() => {
-    ToastAndroid.show('Starting test broadcast', ToastAndroid.SHORT);
-    setStatus('Broadcasting test data...');
-    startBroadcasting('TestUser', 'TEST-UUID-1234');
+    setStatus('🟡 Starting broadcast...');
+    startBroadcasting(nickname, uuid).then(() => {
+      setStatus(`✅ Broadcasting: ${nickname}:${uuid}`);
+      ToastAndroid.show('Broadcasting started', ToastAndroid.SHORT);
+    });
+
     return () => {
       stopBroadcasting();
-      setStatus('Stopped');
+      ToastAndroid.show('Broadcast stopped', ToastAndroid.SHORT);
+      setStatus('🔴 Broadcast stopped');
     };
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>
-      <Text style={{ color: 'lime' }}>🛰 Broadcast Test Screen</Text>
-      <Text style={{ color: 'cyan', marginTop: 10 }}>{status}</Text>
-      <Text style={{ color: '#999', fontSize: 12, marginTop: 20 }}>
-        Use another phone with nRF Connect to check for 'TestUser:TEST-UUID-1234' in Manufacturer Data.
+    <View style={{ flex: 1, backgroundColor: 'black', padding: 20, justifyContent: 'center' }}>
+      <Text style={{ color: 'lime', fontSize: 20, marginBottom: 20 }}>🔬 BLE Broadcast Test</Text>
+      <Text style={{ color: 'cyan', fontSize: 16, marginBottom: 10 }}>{status}</Text>
+      <Text style={{ color: '#999', fontSize: 12 }}>
+        Use another phone with nRF Connect to scan for devices broadcasting "{nickname}:{uuid}".
       </Text>
     </View>
   );
