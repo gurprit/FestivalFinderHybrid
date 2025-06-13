@@ -2,25 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import NicknameScreen from './src/screens/NicknameScreen';
 import { startBroadcasting, stopBroadcasting } from './src/ble/Broadcaster';
+import { startScanning, stopScanning } from './src/ble/Scanner';
 import useBluetoothPermissions from './src/hooks/useBluetoothPermissions';
-import { BleManager } from 'react-native-ble-plx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Buffer } from 'buffer';
-global.Buffer = Buffer;
-
-const bleManager = new BleManager();
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const [detectedUsers, setDetectedUsers] = useState([]);
-  const [allDevices, setAllDevices] = useState([]);
+  const [detectedUsers, setDetectedUsers] = useState<
+    { nickname: string; uuid: string; rawData: string; rawBase64: string; timestamp: number }[]
+  >([]);
+  const [allDevices, setAllDevices] = useState<any[]>([]);
   const [uuid, setUuid] = useState('');
   const [nickname, setNickname] = useState('');
 
   useBluetoothPermissions();
 
   useEffect(() => {
-    const loadAndBroadcast = async () => {
+    const loadAndStart = async () => {
       const storedUuid = await AsyncStorage.getItem('@user_uuid');
       const storedNickname = await AsyncStorage.getItem('@nickname');
 
@@ -29,76 +27,27 @@ export default function App() {
 
       if (storedNickname && storedUuid) {
         await startBroadcasting(storedNickname, storedUuid);
-        console.log('⚡ Broadcasting started');
+        startScanning((data) => {
+          setDetectedUsers((prev) => {
+            const exists = prev.some((u) => u.uuid === data.uuid);
+            if (exists) return prev;
+            return [...prev, data];
+          });
+        });
+        console.log('🚀 Broadcasting and scanning started');
       } else {
-        console.warn('❌ Missing nickname or UUID for broadcasting');
+        console.warn('❌ Missing nickname or UUID');
       }
     };
 
     if (isReady) {
-      loadAndBroadcast();
-      return () => stopBroadcasting();
+      loadAndStart();
+      return () => {
+        stopBroadcasting();
+        stopScanning();
+      };
     }
   }, [isReady]);
-
-  useEffect(() => {
-    const subscription = bleManager.onStateChange((state) => {
-      if (state === 'PoweredOn') {
-        bleManager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => {
-          if (error) {
-            console.warn('Scan error:', error);
-            return;
-          }
-
-          if (device) {
-            setAllDevices((prev) => {
-              const alreadyExists = prev.some((d) => d.id === device.id);
-              if (alreadyExists) return prev;
-              return [...prev, device];
-            });
-
-            const data = device.manufacturerData;
-            if (data) {
-              try {
-                const buffer = Buffer.from(data, 'base64');
-                const try1 = buffer.slice(1).toString('utf8');
-                const try2 = buffer.slice(2).toString('utf8');
-
-                const decoded =
-                  try2.includes(':') && try2.indexOf(':') < 20
-                    ? try2
-                    : try1.includes(':') && try1.indexOf(':') < 20
-                    ? try1
-                    : null;
-
-                if (decoded) {
-                  const [name, id] = decoded.split(':');
-                  if (name && id && !detectedUsers.some((u) => u.uuid === id)) {
-                    setDetectedUsers((prev) => [
-                      ...prev,
-                      {
-                        nickname: name,
-                        uuid: id,
-                        rawData: decoded,
-                        timestamp: Date.now(),
-                      },
-                    ]);
-                  }
-                }
-              } catch (e) {
-                console.warn('❌ Decoding error:', e);
-              }
-            }
-          }
-        });
-      }
-    }, true);
-
-    return () => {
-      bleManager.stopDeviceScan();
-      subscription.remove();
-    };
-  }, [isReady, detectedUsers]);
 
   if (!isReady) {
     return <NicknameScreen onComplete={() => setIsReady(true)} />;
@@ -114,7 +63,7 @@ export default function App() {
       <Text style={{ color: 'lime', fontWeight: 'bold', marginBottom: 5 }}>Nearby Mesh Mates:</Text>
       <ScrollView style={{ maxHeight: 200 }}>
         {detectedUsers.map((user, index) => (
-          <View key={index} style={{ marginBottom: 10 }}>
+          <View key={user.uuid} style={{ marginBottom: 10 }}>
             <Text style={{ color: 'lime' }}>🟢 {user.nickname} ({user.uuid})</Text>
             <Text style={{ color: '#999', fontSize: 10 }}>Raw: {user.rawData}</Text>
             <Text style={{ color: '#999', fontSize: 10 }}>

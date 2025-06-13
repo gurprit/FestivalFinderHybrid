@@ -1,16 +1,12 @@
-// src/ble/Broadcaster.ts
 import BleAdvertiser from 'react-native-ble-advertiser';
 import { Platform, PermissionsAndroid } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const COMPANY_ID = 0x1234; // Use custom/reserved ID again for now
 
 function stringToBytes(str: string): number[] {
   return Array.from(str).map((char) => char.charCodeAt(0));
 }
 
 export async function startBroadcasting(nickname: string, uuid: string) {
-  const payload = `${nickname}:${uuid}`.slice(0, 26);
+  const payload = `MM|${nickname}|${uuid}`.slice(0, 26);
   const payloadBytes = stringToBytes(payload);
 
   console.log('📢 Broadcasting payload:', payload, payloadBytes);
@@ -32,13 +28,13 @@ export async function startBroadcasting(nickname: string, uuid: string) {
   try {
     await BleAdvertiser.broadcast(
       null,
-      stringToBytes(`${nickname}:${uuid}`.slice(0, 26)),
+      payloadBytes,
       {
         advertiseMode: BleAdvertiser.ADVERTISE_MODE_LOW_LATENCY,
         txPowerLevel: BleAdvertiser.ADVERTISE_TX_POWER_HIGH,
         includeDeviceName: false,
         connectable: false,
-        manufacturerId: 0x0059, // Example: Nordic Semiconductor
+        manufacturerId: 0x0059,
       }
     );
 

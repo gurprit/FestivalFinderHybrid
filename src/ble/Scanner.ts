@@ -1,6 +1,4 @@
-// src/ble/Scanner.ts
-
-import { BleManager, BleError } from 'react-native-ble-plx';
+import { BleManager } from 'react-native-ble-plx';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
@@ -16,8 +14,6 @@ export async function startScanning(
     timestamp: number;
   }) => void
 ) {
-  console.log('🔍 Starting BLE scan...');
-
   if (Platform.OS === 'android') {
     const permissions = [
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
@@ -31,17 +27,16 @@ export async function startScanning(
     );
 
     if (!allGranted) {
-      console.warn('❌ Not all scan permissions granted:', granted);
+      console.warn('❌ Not all scan permissions granted');
       return;
     }
   }
 
+  console.log('🔍 Starting BLE scan...');
+
   bleManager.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
     if (error) {
-      const bleError = error as BleError;
-      console.error(
-        `❌ Scan error: ${bleError.message} | Reason: ${bleError.reason} | Code: ${bleError.errorCode}`
-      );
+      console.error('❌ Scan error:', error.message);
       return;
     }
 
@@ -49,23 +44,18 @@ export async function startScanning(
     if (manufacturerData) {
       try {
         const buffer = Buffer.from(manufacturerData, 'base64');
-        const try1 = buffer.slice(1).toString('utf8');
-        const try2 = buffer.slice(2).toString('utf8');
+        const slice1 = buffer.slice(1).toString('utf8');
+        const slice2 = buffer.slice(2).toString('utf8');
         const decoded =
-          try2.includes(':') && try2.indexOf(':') < 20
-            ? try2
-            : try1.includes(':') && try1.indexOf(':') < 20
-            ? try1
-            : null;
-
-        console.log(`📡 Raw base64: ${manufacturerData}`);
-        console.log(`📜 Slice[1]: ${try1}`);
-        console.log(`📜 Slice[2]: ${try2}`);
+          slice2.startsWith('MM|') ? slice2 :
+          slice1.startsWith('MM|') ? slice1 :
+          null;
 
         if (decoded) {
-          console.log(`✅ Parsed payload: ${decoded}`);
-          const [nickname, uuid] = decoded.split(':');
-          if (nickname && uuid) {
+          const parts = decoded.split('|');
+          if (parts.length >= 3) {
+            const nickname = parts[1];
+            const uuid = parts[2];
             onDeviceFound({
               nickname,
               uuid,
@@ -74,14 +64,10 @@ export async function startScanning(
               timestamp: Date.now(),
             });
           }
-        } else {
-          console.log('⚠️ No valid nickname:uuid in payload');
         }
       } catch (e) {
         console.error('⚠️ Failed to parse manufacturerData:', e);
       }
-    } else {
-      console.log('🔎 No manufacturerData on device:', device?.name || device?.id);
     }
   });
 }
