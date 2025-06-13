@@ -1,6 +1,7 @@
 // src/ble/Broadcaster.ts
 import BleAdvertiser from 'react-native-ble-advertiser';
 import { Platform, PermissionsAndroid } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const COMPANY_ID = 0x1234; // Use custom/reserved ID again for now
 

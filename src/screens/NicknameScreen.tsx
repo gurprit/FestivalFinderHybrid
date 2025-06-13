@@ -17,7 +17,7 @@ export default function NicknameScreen({ onComplete }: { onComplete: () => void 
       const savedUUID = await AsyncStorage.getItem(STORAGE_KEY_UUID);
 
       console.log('savedUUID:', savedUUID);
-console.log('savedName:', savedName);
+      console.log('savedName:', savedName);
 
       if (savedName && savedUUID) {
         setNickname(savedName);
