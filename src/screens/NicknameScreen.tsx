@@ -37,12 +37,26 @@ export default function NicknameScreen({ onComplete }: { onComplete: () => void 
   }, []);
 
   const handleSave = async () => {
-    if (nickname.trim().length === 0) {
+    const trimmedNickname = nickname.trim();
+    if (trimmedNickname.length === 0) {
       Alert.alert('Please enter a nickname.');
       return;
     }
 
-    await AsyncStorage.setItem(STORAGE_KEY_NICKNAME, nickname);
+    const sanitizedNickname = trimmedNickname.replace(/\|/g, '');
+    if (sanitizedNickname !== trimmedNickname) {
+      Alert.alert('Notice', 'Your nickname contained invalid characters (|) which were removed.');
+    }
+
+    if (sanitizedNickname.length === 0 && trimmedNickname.length > 0) {
+        Alert.alert('Invalid Nickname', 'Your nickname consisted only of invalid characters. Please enter a valid nickname.');
+        setNickname(''); // Clear the input if it was only pipes
+        return;
+    }
+
+
+    await AsyncStorage.setItem(STORAGE_KEY_NICKNAME, sanitizedNickname);
+    setNickname(sanitizedNickname); // Update state to reflect sanitized version immediately
     onComplete();
   };
 
@@ -53,7 +67,7 @@ export default function NicknameScreen({ onComplete }: { onComplete: () => void 
       <Text style={styles.label}>Enter your nickname:</Text>
       <TextInput
         value={nickname}
-        onChangeText={setNickname}
+        onChangeText={(text) => setNickname(text)} // No sanitization on every keystroke, only on save
         placeholder="Nickname"
         style={styles.input}
       />

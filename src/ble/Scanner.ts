@@ -5,14 +5,27 @@ global.Buffer = Buffer;
 
 const bleManager = new BleManager();
 
+export type ScanEventType = {
+  type: 'direct';
+  nickname: string;
+  uuid: string;
+  rssi: number | null;
+  rawData: string;
+  rawBase64: string;
+  timestamp: number;
+} | {
+  type: 'relayed';
+  originalShortUuid: string;
+  relayerShortUuid: string;
+  originalShortNickname: string;
+  rssi: number | null;
+  rawData: string;
+  rawBase64: string;
+  timestamp: number;
+};
+
 export async function startScanning(
-  onDeviceFound: (data: {
-    nickname: string;
-    uuid: string;
-    rawData: string;
-    rawBase64: string;
-    timestamp: number;
-  }) => void
+  onDeviceFound: (data: ScanEventType) => void
 ) {
   if (Platform.OS === 'android') {
     const permissions = [
@@ -44,29 +57,57 @@ export async function startScanning(
     if (manufacturerData) {
       try {
         const buffer = Buffer.from(manufacturerData, 'base64');
-        const slice1 = buffer.slice(1).toString('utf8');
-        const slice2 = buffer.slice(2).toString('utf8');
-        const decoded =
-          slice2.startsWith('MM|') ? slice2 :
-          slice1.startsWith('MM|') ? slice1 :
-          null;
+        const slice1 = buffer.slice(1).toString('utf8'); // Attempt decoding from byte 1
+        const slice2 = buffer.slice(2).toString('utf8'); // Attempt decoding from byte 2
+
+        let decoded: string | null = null;
+
+        // Prioritize MM| or MR| prefixes, trying both slices
+        if (slice2.startsWith('MM|') || slice2.startsWith('MR|')) {
+          decoded = slice2;
+        } else if (slice1.startsWith('MM|') || slice1.startsWith('MR|')) {
+          decoded = slice1;
+        }
+        // Add more robust check for manufacturer ID if needed in future,
+        // for now, the prefix check is the primary differentiator.
 
         if (decoded) {
           const parts = decoded.split('|');
-          if (parts.length >= 3) {
+          const timestamp = Date.now();
+          const rssi = device.rssi;
+
+          if (decoded.startsWith('MM|') && parts.length >= 3) {
             const nickname = parts[1];
             const uuid = parts[2];
             onDeviceFound({
+              type: 'direct',
               nickname,
               uuid,
+              rssi,
               rawData: decoded,
               rawBase64: manufacturerData,
-              timestamp: Date.now(),
+              timestamp,
             });
+          } else if (decoded.startsWith('MR|') && parts.length >= 4) {
+            const originalShortUuid = parts[1];
+            const relayerShortUuid = parts[2];
+            const originalShortNickname = parts[3];
+            onDeviceFound({
+              type: 'relayed',
+              originalShortUuid,
+              relayerShortUuid,
+              originalShortNickname,
+              rssi,
+              rawData: decoded,
+              rawBase64: manufacturerData,
+              timestamp,
+            });
+          } else {
+            // console.log('Unknown prefix or malformed data:', decoded);
           }
         }
       } catch (e) {
-        console.error('⚠️ Failed to parse manufacturerData:', e);
+        // console.error('⚠️ Failed to parse manufacturerData:', e, manufacturerData);
       }
     }
   });
