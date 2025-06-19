@@ -1,67 +1,23 @@
-diff --git a/node_modules/react-native-ble-advertiser/android/.classpath b/node_modules/react-native-ble-advertiser/android/.classpath
-new file mode 100644
-index 0000000..bbe97e5
---- /dev/null
-+++ b/node_modules/react-native-ble-advertiser/android/.classpath
-@@ -0,0 +1,6 @@
-+<?xml version="1.0" encoding="UTF-8"?>
-+<classpath>
-+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
-+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-+	<classpathentry kind="output" path="bin/default"/>
-+</classpath>
-diff --git a/node_modules/react-native-ble-advertiser/android/.project b/node_modules/react-native-ble-advertiser/android/.project
-index e6e9c1f..4014699 100644
---- a/node_modules/react-native-ble-advertiser/android/.project
-+++ b/node_modules/react-native-ble-advertiser/android/.project
-@@ -1,10 +1,15 @@
- <?xml version="1.0" encoding="UTF-8"?>
- <projectDescription>
--	<name>android</name>
-+	<name>react-native-ble-advertiser</name>
- 	<comment>Project android created by Buildship.</comment>
- 	<projects>
- 	</projects>
- 	<buildSpec>
-+		<buildCommand>
-+			<name>org.eclipse.jdt.core.javabuilder</name>
-+			<arguments>
-+			</arguments>
-+		</buildCommand>
- 		<buildCommand>
- 			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
- 			<arguments>
-@@ -12,6 +17,7 @@
- 		</buildCommand>
- 	</buildSpec>
- 	<natures>
-+		<nature>org.eclipse.jdt.core.javanature</nature>
- 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
- 	</natures>
- 	<filteredResources>
-diff --git a/node_modules/react-native-ble-advertiser/android/.settings/org.eclipse.buildship.core.prefs b/node_modules/react-native-ble-advertiser/android/.settings/org.eclipse.buildship.core.prefs
-new file mode 100644
-index 0000000..1675490
---- /dev/null
-+++ b/node_modules/react-native-ble-advertiser/android/.settings/org.eclipse.buildship.core.prefs
-@@ -0,0 +1,2 @@
-+connection.project.dir=../../../android
-+eclipse.preferences.version=1
 diff --git a/node_modules/react-native-ble-advertiser/android/build.gradle b/node_modules/react-native-ble-advertiser/android/build.gradle
-index 2526548..f105f6b 100644
+index 2526548..4ff19f9 100644
 --- a/node_modules/react-native-ble-advertiser/android/build.gradle
 +++ b/node_modules/react-native-ble-advertiser/android/build.gradle
-@@ -1,8 +1,8 @@
+@@ -1,12 +1,12 @@
  apply plugin: 'com.android.library'
  
  android {
 -    compileSdkVersion 28
--    buildToolsVersion "28.0.3"
-+    compileSdkVersion 33
-+    buildToolsVersion "35.0.0"
++    compileSdkVersion 35
+     buildToolsVersion "28.0.3"
  
      defaultConfig {
-         minSdkVersion 21
+-        minSdkVersion 21
+-        targetSdkVersion 28
++        minSdkVersion 24
++        targetSdkVersion 35
+         versionCode 1
+         versionName "1.0"
+     }
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/results.bin b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/results.bin
 new file mode 100644
 index 0000000..7ed749e
@@ -71,15 +27,15 @@ index 0000000..7ed749e
 +o/bundleLibRuntimeToDirDebug
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.dex b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.dex
 new file mode 100644
-index 0000000..5e27441
+index 0000000..65fbdf6
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.dex differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.dex b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.dex
 new file mode 100644
-index 0000000..022a0d2
+index 0000000..b715527
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.dex differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.dex b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.dex
 new file mode 100644
-index 0000000..417555d
+index 0000000..53c8206
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.dex differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.dex b/node_modules/react-native-ble-advertiser/android/build/.transforms/e5fba294f2d32442bf1d2f4dcafe328b/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.dex
 new file mode 100644
@@ -102,7 +58,7 @@ index 0000000..0d259dd
 +o/classes
 diff --git a/node_modules/react-native-ble-advertiser/android/build/.transforms/f70ca1520e462d65ccdccfea7785d31f/transformed/classes/classes_dex/classes.dex b/node_modules/react-native-ble-advertiser/android/build/.transforms/f70ca1520e462d65ccdccfea7785d31f/transformed/classes/classes_dex/classes.dex
 new file mode 100644
-index 0000000..7df6445
+index 0000000..fc2a58c
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/.transforms/f70ca1520e462d65ccdccfea7785d31f/transformed/classes/classes_dex/classes.dex differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/generated/source/buildConfig/debug/com/vitorpamplona/bleavertiser/BuildConfig.java b/node_modules/react-native-ble-advertiser/android/build/generated/source/buildConfig/debug/com/vitorpamplona/bleavertiser/BuildConfig.java
 new file mode 100644
@@ -122,7 +78,7 @@ index 0000000..d543bd2
 +}
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml b/node_modules/react-native-ble-advertiser/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
 new file mode 100644
-index 0000000..7331231
+index 0000000..5871758
 --- /dev/null
 +++ b/node_modules/react-native-ble-advertiser/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
 @@ -0,0 +1,12 @@
@@ -130,7 +86,7 @@ index 0000000..7331231
 +<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 +    package="com.vitorpamplona.bleavertiser" >
 +
-+    <uses-sdk android:minSdkVersion="21" />
++    <uses-sdk android:minSdkVersion="24" />
 +
 +    <uses-permission android:name="android.permission.BLUETOOTH" />
 +    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -186,7 +142,7 @@ index 0000000..9e26dfe
 \ No newline at end of file
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/react-native-ble-advertiser/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
 new file mode 100644
-index 0000000..8b6d8f3
+index 0000000..aec4e3b
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/react-native-ble-advertiser/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
 new file mode 100644
@@ -197,11 +153,11 @@ new file mode 100644
 index 0000000..e69de29
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/react-native-ble-advertiser/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
 new file mode 100644
-index 0000000..527bc76
+index 0000000..90fac30
 --- /dev/null
 +++ b/node_modules/react-native-ble-advertiser/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
 @@ -0,0 +1 @@
-+#Wed Jun 11 16:00:19 BST 2025
++#Thu Jun 19 18:00:05 BST 2025
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/react-native-ble-advertiser/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
 new file mode 100644
 index 0000000..3706b51
@@ -240,15 +196,15 @@ index 0000000..b20d9bd
 \ No newline at end of file
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class
 new file mode 100644
-index 0000000..a5c6963
+index 0000000..100b3b0
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class
 new file mode 100644
-index 0000000..0993f40
+index 0000000..44dffd1
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class
 new file mode 100644
-index 0000000..ca1e372
+index 0000000..568acaa
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.class
 new file mode 100644
@@ -268,7 +224,7 @@ index 0000000..78ac5b8
 +local
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt b/node_modules/react-native-ble-advertiser/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
 new file mode 100644
-index 0000000..72902d8
+index 0000000..b918c5d
 --- /dev/null
 +++ b/node_modules/react-native-ble-advertiser/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
 @@ -0,0 +1,20 @@
@@ -276,7 +232,7 @@ index 0000000..72902d8
 +2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 +3    package="com.vitorpamplona.bleavertiser" >
 +4
-+5    <uses-sdk android:minSdkVersion="21" />
++5    <uses-sdk android:minSdkVersion="24" />
 +6
 +7    <uses-permission android:name="android.permission.BLUETOOTH" />
 +7-->/Users/gurpritsahota/Documents/GitHub/FestivalFinderHybrid/node_modules/react-native-ble-advertiser/android/src/main/AndroidManifest.xml:3:11-74
@@ -294,7 +250,7 @@ index 0000000..72902d8
 +12</manifest>
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml b/node_modules/react-native-ble-advertiser/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
 new file mode 100644
-index 0000000..7331231
+index 0000000..5871758
 --- /dev/null
 +++ b/node_modules/react-native-ble-advertiser/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
 @@ -0,0 +1,12 @@
@@ -302,7 +258,7 @@ index 0000000..7331231
 +<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 +    package="com.vitorpamplona.bleavertiser" >
 +
-+    <uses-sdk android:minSdkVersion="21" />
++    <uses-sdk android:minSdkVersion="24" />
 +
 +    <uses-permission android:name="android.permission.BLUETOOTH" />
 +    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -329,15 +285,15 @@ index 0000000..08f4ebe
 \ No newline at end of file
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class
 new file mode 100644
-index 0000000..a5c6963
+index 0000000..100b3b0
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$1.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class
 new file mode 100644
-index 0000000..0993f40
+index 0000000..44dffd1
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule$SimpleAdvertiseCallback.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class
 new file mode 100644
-index 0000000..ca1e372
+index 0000000..568acaa
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserModule.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.class b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BLEAdvertiserPackage.class
 new file mode 100644
@@ -349,7 +305,7 @@ index 0000000..b5f67a5
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/vitorpamplona/bleavertiser/BuildConfig.class differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar
 new file mode 100644
-index 0000000..6a4d32b
+index 0000000..10ab492
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar differ
 diff --git a/node_modules/react-native-ble-advertiser/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/react-native-ble-advertiser/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
 new file mode 100644
@@ -399,50 +355,15 @@ index 0000000..aa3ce8f
 +		INJECTED from /Users/gurpritsahota/Documents/GitHub/FestivalFinderHybrid/node_modules/react-native-ble-advertiser/android/src/main/AndroidManifest.xml
 diff --git a/node_modules/react-native-ble-advertiser/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/react-native-ble-advertiser/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
 new file mode 100644
-index 0000000..b493ffd
+index 0000000..e1e0ea9
 Binary files /dev/null and b/node_modules/react-native-ble-advertiser/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
 diff --git a/node_modules/react-native-ble-advertiser/android/src/main/java/com/vitorpamplona/bleadvertiser/BLEAdvertiserModule.java b/node_modules/react-native-ble-advertiser/android/src/main/java/com/vitorpamplona/bleadvertiser/BLEAdvertiserModule.java
-index 036de18..be8316f 100644
+index 036de18..c0f7ac6 100644
 --- a/node_modules/react-native-ble-advertiser/android/src/main/java/com/vitorpamplona/bleadvertiser/BLEAdvertiserModule.java
 +++ b/node_modules/react-native-ble-advertiser/android/src/main/java/com/vitorpamplona/bleadvertiser/BLEAdvertiserModule.java
-@@ -1,67 +1,45 @@
- package com.vitorpamplona.bleavertiser;
- 
--import com.facebook.react.uimanager.*;
- import com.facebook.react.bridge.*;
--import com.facebook.systrace.Systrace;
--import com.facebook.systrace.SystraceMessage;
--import com.facebook.react.ReactInstanceManager;
--import com.facebook.react.ReactRootView;
--import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
- import com.facebook.react.modules.core.DeviceEventManagerModule;
--import com.facebook.react.shell.MainReactPackage;
--import com.facebook.soloader.SoLoader;
- 
--import android.content.Context;
--import android.os.Bundle;
--import android.util.Log;
- import android.bluetooth.BluetoothAdapter;
- import android.bluetooth.BluetoothManager;
- import android.bluetooth.le.AdvertiseCallback;
- import android.bluetooth.le.AdvertiseData;
- import android.bluetooth.le.AdvertiseSettings;
-+import android.bluetooth.le.BluetoothLeAdvertiser;
-+import android.bluetooth.le.BluetoothLeScanner;
- import android.bluetooth.le.ScanCallback;
- import android.bluetooth.le.ScanFilter;
- import android.bluetooth.le.ScanResult;
- import android.bluetooth.le.ScanSettings;
--import android.bluetooth.le.BluetoothLeAdvertiser;
--import android.bluetooth.le.BluetoothLeScanner;
- import android.content.BroadcastReceiver;
-+import android.content.Context;
- import android.content.Intent;
- import android.content.IntentFilter;
--import android.os.ParcelUuid;
+@@ -31,18 +31,7 @@ import android.content.IntentFilter;
+ import android.os.ParcelUuid;
  import android.os.Build;
-+import android.os.ParcelUuid;
-+import android.util.Log;
  
 -import com.facebook.react.modules.core.DeviceEventManagerModule;
 -import com.facebook.react.bridge.WritableMap;
@@ -459,18 +380,10 @@ index 036de18..be8316f 100644
 +import java.util.*;
  
  public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
--
-     public static final String TAG = "BleAdvertiserXX0";
--    private BluetoothAdapter mBluetoothAdapter;
  
-+    private BluetoothAdapter mBluetoothAdapter;
-     private static Hashtable<String, BluetoothLeAdvertiser> mAdvertiserList;
-     private static Hashtable<String, AdvertiseCallback> mAdvertiserCallbackList;
-     private static BluetoothLeScanner mScanner;
-     private static ScanCallback mScannerCallback;
--    private int companyId;
+@@ -56,12 +45,11 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
+     private int companyId;
      private Boolean mObservedState;
-+    private int companyId;
  
 -    //Constructor
      public BLEAdvertiserModule(ReactApplicationContext reactContext) {
@@ -483,26 +396,10 @@ index 036de18..be8316f 100644
  
          BluetoothManager bluetoothManager = (BluetoothManager) reactContext.getApplicationContext()
                  .getSystemService(Context.BLUETOOTH_SERVICE);
-@@ -73,7 +51,7 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
-             mObservedState = mBluetoothAdapter.isEnabled();
-         }
- 
--        this.companyId = 0x0000;
-+        this.companyId = 0x0000; // default; will be overridden via JS
- 
-         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-         reactContext.registerReceiver(mReceiver, filter);
-@@ -87,24 +65,13 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
-     @Override
-     public Map<String, Object> getConstants() {
-         final Map<String, Object> constants = new HashMap<>();
--        constants.put("ADVERTISE_MODE_BALANCED",        AdvertiseSettings.ADVERTISE_MODE_BALANCED);
--        constants.put("ADVERTISE_MODE_LOW_LATENCY",     AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
--        constants.put("ADVERTISE_MODE_LOW_POWER",       AdvertiseSettings.ADVERTISE_MODE_LOW_POWER);
--        constants.put("ADVERTISE_TX_POWER_HIGH",        AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
--        constants.put("ADVERTISE_TX_POWER_LOW",         AdvertiseSettings.ADVERTISE_TX_POWER_LOW);
--        constants.put("ADVERTISE_TX_POWER_MEDIUM",      AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
--        constants.put("ADVERTISE_TX_POWER_ULTRA_LOW",   AdvertiseSettings.ADVERTISE_TX_POWER_ULTRA_LOW);
+@@ -94,66 +82,32 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
+         constants.put("ADVERTISE_TX_POWER_LOW",         AdvertiseSettings.ADVERTISE_TX_POWER_LOW);
+         constants.put("ADVERTISE_TX_POWER_MEDIUM",      AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
+         constants.put("ADVERTISE_TX_POWER_ULTRA_LOW",   AdvertiseSettings.ADVERTISE_TX_POWER_ULTRA_LOW);
 -
 -        constants.put("SCAN_MODE_BALANCED",             ScanSettings.SCAN_MODE_BALANCED);
 -        constants.put("SCAN_MODE_LOW_LATENCY",          ScanSettings.SCAN_MODE_LOW_LATENCY);
@@ -514,53 +411,42 @@ index 036de18..be8316f 100644
 -        constants.put("MATCH_NUM_MAX_ADVERTISEMENT",    ScanSettings.MATCH_NUM_MAX_ADVERTISEMENT);
 -        constants.put("MATCH_NUM_ONE_ADVERTISEMENT",    ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT);
 -
-+        constants.put("ADVERTISE_MODE_BALANCED", AdvertiseSettings.ADVERTISE_MODE_BALANCED);
-+        constants.put("ADVERTISE_MODE_LOW_LATENCY", AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-+        constants.put("ADVERTISE_MODE_LOW_POWER", AdvertiseSettings.ADVERTISE_MODE_LOW_POWER);
-+        constants.put("ADVERTISE_TX_POWER_HIGH", AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-+        constants.put("ADVERTISE_TX_POWER_LOW", AdvertiseSettings.ADVERTISE_TX_POWER_LOW);
-+        constants.put("ADVERTISE_TX_POWER_MEDIUM", AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
-+        constants.put("ADVERTISE_TX_POWER_ULTRA_LOW", AdvertiseSettings.ADVERTISE_TX_POWER_ULTRA_LOW);
          return constants;
      }
  
-@@ -116,458 +83,132 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
+-    @ReactMethod
+-    public void setCompanyId(int companyId) {
+-        this.companyId = companyId;
+-    }
+-
      @ReactMethod
      public void broadcast(String uid, ReadableArray payload, ReadableMap options, Promise promise) {
          if (mBluetoothAdapter == null) {
 -            Log.w("BLEAdvertiserModule", "Device does not support Bluetooth. Adapter is Null");
--            promise.reject("Device does not support Bluetooth. Adapter is Null");
-+            promise.reject("Bluetooth adapter is null");
+             promise.reject("Device does not support Bluetooth. Adapter is Null");
              return;
-         }
- 
+         } 
+         
 -        if (companyId == 0x0000) {
 -            Log.w("BLEAdvertiserModule", "Invalid company id");
 -            promise.reject("Invalid company id");
-+        if (mObservedState != null && !mObservedState) {
-+            promise.reject("Bluetooth is disabled");
-             return;
+-            return;
++        // 🛠 Read manufacturerId from options or fallback
++        if (options != null && options.hasKey("manufacturerId")) {
++            this.companyId = options.getInt("manufacturerId");
          }
  
 -        if (mBluetoothAdapter == null) {
 -            Log.w("BLEAdvertiserModule", "mBluetoothAdapter unavailable");
 -            promise.reject("mBluetoothAdapter unavailable");
 -            return;
-+        // 🆕 Use manufacturerId from options if provided
-+        int manufacturerId = this.companyId;
-+        if (options.hasKey("manufacturerId") && !options.isNull("manufacturerId")) {
-+            try {
-+                manufacturerId = options.getInt("manufacturerId");
-+            } catch (Exception e) {
-+                Log.w(TAG, "Invalid manufacturerId in options; using default.");
-+            }
++        if (this.companyId == 0x0000) {
++            this.companyId = 0x1234; // fallback ID
          }
  
--        if (mObservedState != null && !mObservedState) {
+         if (mObservedState != null && !mObservedState) {
 -            Log.w("BLEAdvertiserModule", "Bluetooth disabled");
--            promise.reject("Bluetooth disabled");
-+        if (manufacturerId == 0x0000) {
-+            promise.reject("Invalid manufacturer id");
+             promise.reject("Bluetooth disabled");
              return;
          }
  
@@ -579,30 +465,23 @@ index 036de18..be8316f 100644
 -         
 -        if (tempAdvertiser == null) {
 -            Log.w("BLEAdvertiserModule", "Advertiser Not Available unavailable");
--            promise.reject("Advertiser unavailable on this device");
 +        BluetoothLeAdvertiser advertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
 +        if (advertiser == null) {
-+            promise.reject("BLE advertising not supported on this device");
+             promise.reject("Advertiser unavailable on this device");
              return;
          }
- 
+@@ -161,311 +115,33 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
          AdvertiseSettings settings = buildAdvertiseSettings(options);
--        AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), toByteArray(payload), options);
-+        AdvertiseData data = buildAdvertiseData(
-+                uid != null ? ParcelUuid.fromString(uid) : null,
-+                toByteArray(payload),
-+                options,
-+                manufacturerId
-+        );
+         AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), toByteArray(payload), options);
  
 -        tempAdvertiser.startAdvertising(settings, data, tempCallback);
 +        AdvertiseCallback callback = new SimpleAdvertiseCallback(promise);
-+        advertiser.startAdvertising(settings, data, callback);
  
 -        mAdvertiserList.put(uid, tempAdvertiser);
 -        mAdvertiserCallbackList.put(uid, tempCallback);
-+        mAdvertiserList.put(uid != null ? uid : "default", advertiser);
-+        mAdvertiserCallbackList.put(uid != null ? uid : "default", callback);
++        advertiser.startAdvertising(settings, data, callback);
++        mAdvertiserList.put(uid, advertiser);
++        mAdvertiserCallbackList.put(uid, callback);
      }
  
      private byte[] toByteArray(ReadableArray payload) {
@@ -625,24 +504,18 @@ index 036de18..be8316f 100644
 -   @ReactMethod
 -    public void stopBroadcast(final Promise promise) {
 -        Log.w("BLEAdvertiserModule", "Stop Broadcast call");
-+    private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
-+        AdvertiseSettings.Builder builder = new AdvertiseSettings.Builder();
- 
+-
 -        if (mBluetoothAdapter == null) {
 -            Log.w("BLEAdvertiserModule", "mBluetoothAdapter unavailable");
 -            promise.reject("mBluetoothAdapter unavailable");
 -            return;
-+        if (options.hasKey("advertiseMode")) {
-+            builder.setAdvertiseMode(options.getInt("advertiseMode"));
-         }
+-        } 
 -
 -        if (mObservedState != null && !mObservedState) {
 -            Log.w("BLEAdvertiserModule", "Bluetooth disabled");
 -            promise.reject("Bluetooth disabled");
 -            return;
-+        if (options.hasKey("txPowerLevel")) {
-+            builder.setTxPowerLevel(options.getInt("txPowerLevel"));
-         }
+-        }
 -
 -        WritableArray promiseArray=Arguments.createArray();
 -
@@ -654,14 +527,11 @@ index 036de18..be8316f 100644
 -                tempAdvertiser.stopAdvertising(tempCallback);
 -                promiseArray.pushString(key);
 -            }
-+        if (options.hasKey("connectable")) {
-+            builder.setConnectable(options.getBoolean("connectable"));
-         }
- 
+-        }
+-
 -        promise.resolve(promiseArray);
-+        return builder.build();
-     }
- 
+-    }
+-
 -    @ReactMethod
 -	public void scanByService(String uid, ReadableMap options, Promise promise) {
 -        scan(uid, null, options, promise);
@@ -671,16 +541,12 @@ index 036de18..be8316f 100644
 -    public void scan(ReadableArray manufacturerPayload, ReadableMap options, Promise promise) {
 -        scan(null, manufacturerPayload, options, promise);
 -    }
-+    private AdvertiseData buildAdvertiseData(ParcelUuid uuid, byte[] payload, ReadableMap options, int manufacturerId) {
-+        AdvertiseData.Builder builder = new AdvertiseData.Builder();
- 
+-
 -	public void scan(String uid, ReadableArray manufacturerPayload, ReadableMap options, Promise promise) {
 -        if (mBluetoothAdapter == null) {
 -            promise.reject("Device does not support Bluetooth. Adapter is Null");
 -            return;
-+        if (options.hasKey("includeDeviceName")) {
-+            builder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
-         }
+-        }
 -
 -        if (mObservedState != null && !mObservedState) {
 -            Log.w("BLEAdvertiserModule", "Bluetooth disabled");
@@ -691,20 +557,15 @@ index 036de18..be8316f 100644
 -        if (mScannerCallback == null) {
 -            // Cannot change. 
 -            mScannerCallback = new SimpleScanCallback();
-+        if (options.hasKey("includeTxPowerLevel")) {
-+            builder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
-         }
- 
+-        } 
+-        
 -        if (mScanner == null) {
 -            mScanner = mBluetoothAdapter.getBluetoothLeScanner();
 -        } else {
 -            // was running. Needs to stop first. 
 -            mScanner.stopScan(mScannerCallback);
-+        builder.addManufacturerData(manufacturerId, payload);
-+        if (uuid != null) {
-+            builder.addServiceUuid(uuid);
-         }
- 
+-        }
+-
 -        if (mScanner == null) {
 -            Log.w("BLEAdvertiserModule", "Scanner Not Available unavailable");
 -            promise.reject("Scanner unavailable on this device");
@@ -723,10 +584,9 @@ index 036de18..be8316f 100644
 -        
 -        mScanner.startScan(filters, scanSettings, mScannerCallback);
 -        promise.resolve("Scanner started");
-+        return builder.build();
-     }
- 
-     @ReactMethod
+-    }
+-
+-    @ReactMethod
 -    public void addListener(String eventName) {
 -
 -    }
@@ -768,13 +628,7 @@ index 036de18..be8316f 100644
 -        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 -            if (options != null && options.hasKey("numberOfMatches")) {
 -                scanSettingsBuilder.setNumOfMatches(options.getInt("numberOfMatches"));
-+    public void stopBroadcast(Promise promise) {
-+        for (String key : mAdvertiserList.keySet()) {
-+            BluetoothLeAdvertiser advertiser = mAdvertiserList.get(key);
-+            AdvertiseCallback callback = mAdvertiserCallbackList.get(key);
-+            if (advertiser != null && callback != null) {
-+                advertiser.stopAdvertising(callback);
-             }
+-            }
 -            if (options != null && options.hasKey("matchMode")) {
 -                scanSettingsBuilder.setMatchMode(options.getInt("matchMode"));
 -            }
@@ -782,7 +636,7 @@ index 036de18..be8316f 100644
 -
 -        if (options != null && options.hasKey("reportDelay")) {
 -            scanSettingsBuilder.setReportDelay(options.getInt("reportDelay"));
-         }
+-        }
 -
 -        return scanSettingsBuilder.build();
 -    }
@@ -903,7 +757,7 @@ index 036de18..be8316f 100644
 -        promise.resolve(mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON); 
 -    }
 -
--    private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
+     private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
 -        AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder();
 -
 -        if (options != null && options.hasKey("advertiseMode")) {
@@ -919,10 +773,15 @@ index 036de18..be8316f 100644
 -        }
 -
 -        return settingsBuilder.build();
--    }
--
--    private AdvertiseData buildAdvertiseData(ParcelUuid uuid, byte[] payload, ReadableMap options) {
--        AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
++        AdvertiseSettings.Builder builder = new AdvertiseSettings.Builder();
++        builder.setAdvertiseMode(options.hasKey("advertiseMode") ? options.getInt("advertiseMode") : AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
++        builder.setTxPowerLevel(options.hasKey("txPowerLevel") ? options.getInt("txPowerLevel") : AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
++        builder.setConnectable(options.hasKey("connectable") && options.getBoolean("connectable"));
++        return builder.build();
+     }
+ 
+     private AdvertiseData buildAdvertiseData(ParcelUuid uuid, byte[] payload, ReadableMap options) {
+         AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
 -
 -        if (options != null && options.hasKey("includeDeviceName")) 
 -            dataBuilder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
@@ -930,17 +789,14 @@ index 036de18..be8316f 100644
 -         if (options != null && options.hasKey("includeTxPowerLevel")) 
 -            dataBuilder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
 -        
--        dataBuilder.addManufacturerData(companyId, payload);
--        dataBuilder.addServiceUuid(uuid);
--        return dataBuilder.build();
-+        mAdvertiserList.clear();
-+        mAdvertiserCallbackList.clear();
-+        promise.resolve(null);
-     }
- 
++        if (options.hasKey("includeDeviceName")) dataBuilder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
++        if (options.hasKey("includeTxPowerLevel")) dataBuilder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
+         dataBuilder.addManufacturerData(companyId, payload);
+         dataBuilder.addServiceUuid(uuid);
+         return dataBuilder.build();
+@@ -474,100 +150,26 @@ public class BLEAdvertiserModule extends ReactContextBaseJavaModule {
      private class SimpleAdvertiseCallback extends AdvertiseCallback {
--        Promise promise;
-+        private final Promise promise;
+         Promise promise;
  
 -        public SimpleAdvertiseCallback () {
 -        }
@@ -969,7 +825,7 @@ index 036de18..be8316f 100644
 -                case ADVERTISE_FAILED_INTERNAL_ERROR:
 -                    promise.reject("Operation failed due to an internal error."); break;
 -            }
-+            promise.reject("Advertise failed with code: " + errorCode);
++            if (promise != null) promise.reject("Broadcast failed", "Error code: " + errorCode);
          }
  
          @Override
@@ -979,7 +835,7 @@ index 036de18..be8316f 100644
 -
 -            if (promise == null) return;
 -            promise.resolve(settingsInEffect.toString());
-+            promise.resolve("Advertise started successfully");
++            if (promise != null) promise.resolve("Broadcast success");
          }
      }
  
@@ -1019,10 +875,8 @@ index 036de18..be8316f 100644
 -                    sendEvent("onBTStatusChange", params);
 -                }
 -            }
-+            if (!BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) return;
-+
 +            final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-+            mObservedState = state == BluetoothAdapter.STATE_ON;
++            mObservedState = (state == BluetoothAdapter.STATE_ON || state == BluetoothAdapter.STATE_TURNING_ON);
          }
      };
 -

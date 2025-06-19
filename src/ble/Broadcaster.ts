@@ -6,7 +6,7 @@ function stringToBytes(str: string): number[] {
 }
 
 export async function startBroadcasting(nickname: string, uuid: string) {
-  const payload = `MM|${nickname}|${uuid}`.slice(0, 26);
+  const payload = `MM|${nickname}|${uuid}`.substring(0, 20);
   const payloadBytes = stringToBytes(payload);
 
   console.log('📢 Broadcasting payload:', payload, payloadBytes);
@@ -27,7 +27,7 @@ export async function startBroadcasting(nickname: string, uuid: string) {
 
   try {
     await BleAdvertiser.broadcast(
-      null,
+      '00000000-0000-1000-8000-00805F9B34FB', // ✅ valid dummy UUID
       payloadBytes,
       {
         advertiseMode: BleAdvertiser.ADVERTISE_MODE_LOW_LATENCY,

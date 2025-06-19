@@ -18,5 +18,21 @@ buildscript {
     }
 }
 
-
 apply plugin: "com.facebook.react.rootproject"
+
+subprojects { project ->
+    if (project.name.contains("react-native-ble-advertiser") ||
+        project.name.contains("react-native-ble-plx")) {
+        project.plugins.whenPluginAdded { plugin ->
+            if (plugin.class.name == "com.android.build.gradle.LibraryPlugin") {
+                project.android {
+                    compileSdk rootProject.ext.compileSdkVersion
+                    defaultConfig {
+                        minSdk rootProject.ext.minSdkVersion
+                        targetSdk rootProject.ext.targetSdkVersion
+                    }
+                }
+            }
+        }
+    }
+}
