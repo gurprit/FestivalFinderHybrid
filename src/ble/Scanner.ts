@@ -5,6 +5,13 @@ global.Buffer = Buffer;
 
 const bleManager = new BleManager();
 
+function estimateDistance(rssi: number, txPower = -59): number {
+  if (rssi === 0) return -1.0;
+  const ratio = rssi * 1.0 / txPower;
+  if (ratio < 1.0) return Math.pow(ratio, 10);
+  else return 0.89976 * Math.pow(ratio, 7.7095) + 0.111;
+}
+
 export async function startScanning(
   onDeviceFound: (data: {
     nickname: string;
@@ -12,6 +19,8 @@ export async function startScanning(
     rawData: string;
     rawBase64: string;
     timestamp: number;
+    rssi: number;
+    distance: number;
   }) => void
 ) {
   if (Platform.OS === 'android') {
@@ -56,12 +65,17 @@ export async function startScanning(
           if (parts.length >= 3) {
             const nickname = parts[1];
             const uuid = parts[2];
+            const rssi = device.rssi ?? -100;
+            const distance = estimateDistance(rssi);
+
             onDeviceFound({
               nickname,
               uuid,
               rawData: decoded,
               rawBase64: manufacturerData,
               timestamp: Date.now(),
+              rssi,
+              distance,
             });
           }
         }

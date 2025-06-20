@@ -9,9 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [detectedUsers, setDetectedUsers] = useState<
-    { nickname: string; uuid: string; rawData: string; rawBase64: string; timestamp: number }[]
+    { nickname: string; uuid: string; rawData: string; rawBase64: string; timestamp: number; rssi: number; distance: number }[]
   >([]);
-  const [allDevices, setAllDevices] = useState<any[]>([]);
   const [uuid, setUuid] = useState('');
   const [nickname, setNickname] = useState('');
 
@@ -29,9 +28,16 @@ export default function App() {
         await startBroadcasting(storedNickname, storedUuid);
         startScanning((data) => {
           setDetectedUsers((prev) => {
-            const exists = prev.some((u) => u.uuid === data.uuid);
-            if (exists) return prev;
-            return [...prev, data];
+            const existingIndex = prev.findIndex((u) => u.uuid === data.uuid);
+            if (existingIndex !== -1) {
+              // Update existing entry
+              const updated = [...prev];
+              updated[existingIndex] = { ...prev[existingIndex], ...data };
+              return updated;
+            } else {
+              // Add new entry
+              return [...prev, data];
+            }
           });
         });
         console.log('🚀 Broadcasting and scanning started');
@@ -61,17 +67,43 @@ export default function App() {
       </Text>
 
       <Text style={{ color: 'lime', fontWeight: 'bold', marginBottom: 5 }}>Nearby Mesh Mates:</Text>
-      <ScrollView style={{ maxHeight: 200 }}>
-        {detectedUsers.map((user, index) => (
-          <View key={user.uuid} style={{ marginBottom: 10 }}>
-            <Text style={{ color: 'lime' }}>🟢 {user.nickname} ({user.uuid})</Text>
-            <Text style={{ color: '#999', fontSize: 10 }}>Raw: {user.rawData}</Text>
-            <Text style={{ color: '#999', fontSize: 10 }}>
-              Seen at: {new Date(user.timestamp).toLocaleTimeString()}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
+      <ScrollView style={{ maxHeight: 300 }}>
+  {detectedUsers.map((user) => {
+    const distance = user.distance;
+    const proximityPercent = Math.max(0, Math.min(1, 1 - distance / 50)); // Cap at ~50m
+    const barWidth = `${Math.round(proximityPercent * 100)}%`;
+
+    return (
+      <View key={user.uuid} style={{ marginBottom: 20 }}>
+        <Text style={{ color: 'lime' }}>🟢 {user.nickname} ({user.uuid})</Text>
+        <Text style={{ color: '#999', fontSize: 10 }}>📶 RSSI: {user.rssi}</Text>
+        <Text style={{ color: '#999', fontSize: 20 }}>📏 Distance: ~{user.distance.toFixed(2)} meters</Text>
+
+        {/* Proximity Bar */}
+        <View style={{
+          height: 10,
+          backgroundColor: '#333',
+          marginTop: 6,
+          marginBottom: 6,
+          borderRadius: 5,
+          overflow: 'hidden',
+        }}>
+          <View style={{
+            width: barWidth,
+            height: '100%',
+            backgroundColor: 'lime',
+          }} />
+        </View>
+
+        <Text style={{ color: '#666', fontSize: 10 }}>Raw: {user.rawData}</Text>
+        <Text style={{ color: '#666', fontSize: 10 }}>
+          Seen at: {new Date(user.timestamp).toLocaleTimeString()}
+        </Text>
+      </View>
+    );
+  })}
+</ScrollView>
+
     </View>
   );
 }
