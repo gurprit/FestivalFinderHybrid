@@ -4,11 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import NicknameScreen from './src/screens/NicknameScreen';
-
 import { startBroadcasting, stopBroadcasting } from './src/ble/Broadcaster';
 import { startScanning, stopScanning } from './src/ble/Scanner';
 import useBluetoothPermissions from './src/hooks/useBluetoothPermissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { magnetometer, SensorTypes, setUpdateIntervalForType } from 'react-native-sensors';
+import { map, filter } from 'rxjs/operators';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +21,7 @@ function MainScreen({ navigation }: any) {
   const [friends, setFriends] = useState<{ nickname: string; uuid: string }[]>([]);
   const [uuid, setUuid] = useState('');
   const [nickname, setNickname] = useState('');
+  const [heading, setHeading] = useState<number | null>(null);
 
   useBluetoothPermissions();
 
@@ -58,6 +61,27 @@ function MainScreen({ navigation }: any) {
     };
   }, []);
 
+  useEffect(() => {
+    setUpdateIntervalForType(SensorTypes.magnetometer, 500); // Update every 500ms
+
+    const subscription = magnetometer
+      .pipe(
+        filter(({ x, y, z }) => x !== 0 || y !== 0 || z !== 0),
+        map(({ x, y }) => {
+          let angle = Math.atan2(y, x) * (180 / Math.PI);
+          if (angle < 0) angle += 360;
+          return Math.round(angle);
+        })
+      )
+      .subscribe((angle) => {
+        setHeading(angle);
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const handleAddFriend = async (user: { uuid: string; nickname: string }) => {
     const updated = [...friends, { uuid: user.uuid, nickname: user.nickname }];
     setFriends(updated);
@@ -78,6 +102,10 @@ function MainScreen({ navigation }: any) {
       <Text style={{ color: 'lime', fontSize: 18, marginBottom: 10 }}>📡 Broadcasting yourself...</Text>
       <Text style={{ color: 'lime', fontSize: 16, marginBottom: 10 }}>
         🧍 You: {nickname || 'Unknown'} ({uuid || 'No UUID'})
+      </Text>
+
+      <Text style={{ color: 'lime', fontSize: 14, marginBottom: 10 }}>
+        🧭 Heading: {heading !== null ? `${heading}°` : 'Loading...'}
       </Text>
 
       <Text style={{ color: 'lime', fontWeight: 'bold', marginTop: 20 }}>✅ Added Friends:</Text>
@@ -130,5 +158,5 @@ export default function App() {
         <Stack.Screen name="FestivalFinder" component={MainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  );jj
 }
