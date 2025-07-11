@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, ToastAndroid } from 'react-native';
-import { startBroadcasting, stopBroadcasting } from '../ble/Broadcaster';
+import { startBroadcasting } from '../ble/Broadcaster';
 import { startScanning, stopScanning } from '../ble/Scanner';
 
 export default function TestAdvertiserScreen() {
@@ -14,11 +14,6 @@ export default function TestAdvertiserScreen() {
 
     setStatus('🟡 Starting broadcast and scan...');
 
-    startBroadcasting(nickname, uuid).then(() => {
-      setStatus(`✅ Broadcasting as: ${nickname}:${uuid}`);
-      ToastAndroid.show('Broadcast started', ToastAndroid.SHORT);
-    });
-
     startScanning((device) => {
       const entry = `📶 ${device.nickname}:${device.uuid}\n📡 Raw Base64: ${device.rawBase64}\n📜 Raw Text: ${device.rawData}`;
       console.log('🎯 Detected:', entry);
@@ -29,7 +24,6 @@ export default function TestAdvertiserScreen() {
 
     return () => {
       mounted = false;
-      stopBroadcasting();
       stopScanning();
       ToastAndroid.show('Broadcast & Scan stopped', ToastAndroid.SHORT);
       setStatus('🔴 Broadcast & Scan stopped');

@@ -5,47 +5,40 @@ function stringToBytes(str: string): number[] {
   return Array.from(str).map((char) => char.charCodeAt(0));
 }
 
-export async function startBroadcasting(nickname: string, uuid: string) {
-  const payload = `MM|${nickname}|${uuid}`.substring(0, 20);
+export async function startBroadcasting(nickname: string, uuid: string, heading: number) {
+  const shortName = nickname.slice(0, 6);                     // 6 chars
+  const shortUUID = uuid.replace(/-/g, '').slice(0, 6);       // 6 chars
+  const shortHeading = heading.toString().padStart(3, '0');   // 3 chars
+  const payload = `MM|${shortName}|${shortUUID}|${shortHeading}`; // ~19 chars max
+
   const payloadBytes = stringToBytes(payload);
-
   console.log('📢 Broadcasting payload:', payload, payloadBytes);
-
-  if (Platform.OS === 'android' && Platform.Version >= 31) {
-    const granted = await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADVERTISE,
-    ]);
-
-    if (
-      granted['android.permission.BLUETOOTH_ADVERTISE'] !==
-      PermissionsAndroid.RESULTS.GRANTED
-    ) {
-      console.warn('❌ BLUETOOTH_ADVERTISE permission not granted');
-      return;
-    }
-  }
 
   try {
     await BleAdvertiser.broadcast(
-      '00000000-0000-1000-8000-00805F9B34FB', // ✅ valid dummy UUID
+      '00000000-0000-1000-8000-00805F9B34FB',
       payloadBytes,
       {
         advertiseMode: BleAdvertiser.ADVERTISE_MODE_LOW_LATENCY,
         txPowerLevel: BleAdvertiser.ADVERTISE_TX_POWER_HIGH,
         includeDeviceName: false,
         connectable: false,
-        manufacturerId: 0x0059,
+        manufacturerId: 0x1234,  // Ensure this matches your patched native code
       }
     );
-
     console.log('✅ Broadcasting started');
   } catch (error) {
     console.error('❌ Broadcast error:', error);
+    throw error;
   }
 }
 
-export function stopBroadcasting() {
-  BleAdvertiser.stopBroadcast()
-    .then(() => console.log('🛑 Broadcast stopped'))
-    .catch((err) => console.error('❌ Stop broadcast error:', err));
+// 🔧 Add this:
+export async function stopAdvertising() {
+  try {
+    await BleAdvertiser.stopBroadcast();
+    console.log('🛑 Broadcasting stopped');
+  } catch (error) {
+    console.warn('⚠️ Failed to stop broadcasting:', error);
+  }
 }

@@ -1,6 +1,7 @@
 import { BleManager } from 'react-native-ble-plx';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Buffer } from 'buffer';
+
 global.Buffer = Buffer;
 
 const bleManager = new BleManager();
@@ -16,6 +17,7 @@ export async function startScanning(
   onDeviceFound: (data: {
     nickname: string;
     uuid: string;
+    heading: number | null;
     rawData: string;
     rawBase64: string;
     timestamp: number;
@@ -62,15 +64,17 @@ export async function startScanning(
 
         if (decoded) {
           const parts = decoded.split('|');
-          if (parts.length >= 3) {
+          if (parts.length >= 4) {
             const nickname = parts[1];
             const uuid = parts[2];
+            const heading = parseInt(parts[3], 10);
             const rssi = device.rssi ?? -100;
             const distance = estimateDistance(rssi);
 
             onDeviceFound({
               nickname,
               uuid,
+              heading: isNaN(heading) ? null : heading,
               rawData: decoded,
               rawBase64: manufacturerData,
               timestamp: Date.now(),
