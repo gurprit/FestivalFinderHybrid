@@ -4,46 +4,28 @@ import { View, Text, StyleSheet } from 'react-native';
 type Friend = {
   uuid: string;
   nickname: string;
-  heading?: number; // absolute heading from their device
+  heading?: number;
   distance: number;
 };
 
 type Props = {
-  heading: number; // your own device heading
+  heading: number; // Your device's current heading (0-360)
   friends: Friend[];
-  radius?: number; // radar radius in pixels
-  maxDistance?: number; // maximum distance to show on radar
 };
 
-const RadarView: React.FC<Props> = ({
-  heading,
-  friends,
-  radius = 150,
-  maxDistance = 50,
-}) => {
-  const center = radius;
-  const diameter = radius * 2;
-
+const RadarView: React.FC<Props> = ({ heading, friends }) => {
   return (
-    <View style={[styles.radar, { width: diameter, height: diameter, borderRadius: radius }]}>
+    <View style={styles.container}>
       {friends.map((friend) => {
-        if (friend.heading === undefined || friend.distance > maxDistance) return null;
+        if (friend.heading === undefined) return null;
 
-        // Convert to relative angle based on device heading
-        const relativeAngle = ((friend.heading - heading + 360) % 360) * (Math.PI / 180);
-        const normalizedDistance = Math.min(friend.distance / maxDistance, 1);
-        const dotX = center + radius * normalizedDistance * Math.sin(relativeAngle) - 6;
-        const dotY = center - radius * normalizedDistance * Math.cos(relativeAngle) - 6;
+        // Calculate relative angle: difference between your heading and friend's heading
+        const relativeAngle = ((friend.heading - heading + 360) % 360);
 
         return (
-          <View
-            key={friend.uuid}
-            style={[
-              styles.dot,
-              { left: dotX, top: dotY },
-            ]}
-          >
-            <Text style={styles.dotText}>📍</Text>
+          <View key={friend.uuid} style={styles.friendContainer}>
+            <Text style={styles.arrow} transform={[{ rotate: `${relativeAngle}deg` }]}>➡️</Text>
+            <Text style={styles.nickname}>{friend.nickname} ({Math.round(relativeAngle)}°)</Text>
           </View>
         );
       })}
@@ -52,23 +34,22 @@ const RadarView: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  radar: {
-    backgroundColor: '#111',
-    borderWidth: 2,
-    borderColor: 'lime',
-    position: 'relative',
-    marginVertical: 20,
-  },
-  dot: {
-    position: 'absolute',
-    width: 12,
-    height: 12,
+  container: {
+    marginTop: 20,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  dotText: {
-    fontSize: 12,
+  friendContainer: {
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  arrow: {
+    fontSize: 32,
     color: 'lime',
+  },
+  nickname: {
+    color: 'lime',
+    fontSize: 14,
+    marginTop: 4,
   },
 });
 

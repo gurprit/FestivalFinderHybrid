@@ -1,10 +1,12 @@
+// Scanner.ts
 import { BleManager } from 'react-native-ble-plx';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Buffer } from 'buffer';
 
 global.Buffer = Buffer;
 
-const bleManager = new BleManager();
+let bleManager = new BleManager();
+let isScanning = false;
 
 function estimateDistance(rssi: number, txPower = -59): number {
   if (rssi === 0) return -1.0;
@@ -25,6 +27,11 @@ export async function startScanning(
     distance: number;
   }) => void
 ) {
+  if (isScanning) {
+    console.warn('⚠️ startScanning called but scan already in progress. Skipping.');
+    return;
+  }
+
   if (Platform.OS === 'android') {
     const permissions = [
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
@@ -44,53 +51,69 @@ export async function startScanning(
   }
 
   console.log('🔍 Starting BLE scan...');
+  isScanning = true;
 
-  bleManager.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
-    if (error) {
-      console.error('❌ Scan error:', error.message);
-      return;
-    }
+  try {
+    // 👉 Fully recreate the BleManager before scanning
+    bleManager.destroy();
+    bleManager = new BleManager();
 
-    const manufacturerData = device?.manufacturerData;
-    if (manufacturerData) {
-      try {
-        const buffer = Buffer.from(manufacturerData, 'base64');
-        const slice1 = buffer.slice(1).toString('utf8');
-        const slice2 = buffer.slice(2).toString('utf8');
-        const decoded =
-          slice2.startsWith('MM|') ? slice2 :
-          slice1.startsWith('MM|') ? slice1 :
-          null;
-
-        if (decoded) {
-          const parts = decoded.split('|');
-          if (parts.length >= 4) {
-            const nickname = parts[1];
-            const uuid = parts[2];
-            const heading = parseInt(parts[3], 10);
-            const rssi = device.rssi ?? -100;
-            const distance = estimateDistance(rssi);
-
-            onDeviceFound({
-              nickname,
-              uuid,
-              heading: isNaN(heading) ? null : heading,
-              rawData: decoded,
-              rawBase64: manufacturerData,
-              timestamp: Date.now(),
-              rssi,
-              distance,
-            });
-          }
-        }
-      } catch (e) {
-        console.error('⚠️ Failed to parse manufacturerData:', e);
+    bleManager.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
+      if (error) {
+        console.error('❌ Scan error callback:', error.message);
+        isScanning = false;
+        return;
       }
-    }
-  });
+
+      const manufacturerData = device?.manufacturerData;
+      if (manufacturerData) {
+        try {
+          const buffer = Buffer.from(manufacturerData, 'base64');
+          const slice1 = buffer.slice(1).toString('utf8');
+          const slice2 = buffer.slice(2).toString('utf8');
+          const decoded =
+            slice2.startsWith('MM|') ? slice2 :
+            slice1.startsWith('MM|') ? slice1 :
+            null;
+
+          if (decoded) {
+            const parts = decoded.split('|');
+            if (parts.length >= 4) {
+              const nickname = parts[1];
+              const uuid = parts[2];
+              const heading = parseInt(parts[3], 10);
+              const rssi = device.rssi ?? -100;
+              const distance = estimateDistance(rssi);
+
+              onDeviceFound({
+                nickname,
+                uuid,
+                heading: isNaN(heading) ? null : heading,
+                rawData: decoded,
+                rawBase64: manufacturerData,
+                timestamp: Date.now(),
+                rssi,
+                distance,
+              });
+            }
+          }
+        } catch (e) {
+          console.error('⚠️ Failed to parse manufacturerData:', e);
+        }
+      }
+    });
+  } catch (e) {
+    console.error('❌ startDeviceScan threw immediately:', e);
+    isScanning = false;
+  }
 }
 
-export function stopScanning() {
-  bleManager.stopDeviceScan();
-  console.log('🛑 Stopped BLE scanning');
+export async function stopScanning() {
+  try {
+    bleManager.stopDeviceScan();
+    console.log('🛑 Stopped BLE scanning');
+  } catch (e) {
+    console.warn('⚠️ stopDeviceScan threw an error:', e);
+  }
+  isScanning = false;
 }

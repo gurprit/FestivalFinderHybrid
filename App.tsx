@@ -30,7 +30,7 @@ function MainScreen() {
     let retries = 0;
     const maxRetries = 3;
     const delay = 800;
-  
+
     while (retries < maxRetries) {
       try {
         await startBroadcasting(name, uuid, heading);
@@ -42,10 +42,9 @@ function MainScreen() {
         await new Promise((r) => setTimeout(r, delay));
       }
     }
-  
+
     console.error('❌ Broadcasting failed after retries');
   };
-  
 
   useEffect(() => {
     const loadAndStart = async () => {
@@ -58,7 +57,6 @@ function MainScreen() {
       if (storedFriends) setFriends(JSON.parse(storedFriends));
 
       if (storedNickname && storedUuid) {
-
         try {
           await BleAdvertiser.setCompanyId(0x1234);
           console.log('✅ companyId set to 0x1234');
@@ -66,47 +64,48 @@ function MainScreen() {
           console.error('❌ Failed to set companyId:', err);
         }
 
-        const waitForHeading = async () => {
-          let attempts = 0;
-          while (heading === null && headingSupported && attempts < 10) {
-            await new Promise((resolve) => setTimeout(resolve, 200));
-            attempts++;
+        const blePeriodicCycle = async () => {
+          if (bleBusy) {
+            console.log('⏳ BLE cycle still running, skipping this interval');
+            return;
           }
 
-          const headingToSend = headingSupported ? heading ?? 0 : 0;
-          console.log('🧭 Heading sent to broadcaster (after wait):', headingToSend);
+          setBleBusy(true);
+          try {
+            console.log('🔔 BLE cycle starting');
 
-          if (!bleBusy) {
-            setBleBusy(true);
-            try {
-              await stopScanning();
-              await new Promise((r) => setTimeout(r, 800));
+            await stopScanning();
+            console.log('⏳ Waiting extra 1000ms after stopScanning');
+            await new Promise((r) => setTimeout(r, 1000));
 
-              await safeStartBroadcasting(storedNickname, storedUuid, headingToSend);
-              await new Promise((r) => setTimeout(r, 500));
+            const headingToSend = headingSupported ? heading ?? 0 : 0;
+            console.log('🧭 Heading used in cycle:', headingToSend);
 
-              await stopAdvertising();
-              await new Promise((r) => setTimeout(r, 500));
+            await safeStartBroadcasting(storedNickname, storedUuid, headingToSend);
+            await new Promise((r) => setTimeout(r, 500));
 
-              await startScanning((data) => {
-                setDetectedUsers((prev) => {
-                  const exists = prev.find((u) => u.uuid === data.uuid);
-                  return exists
-                    ? prev.map((u) => (u.uuid === data.uuid ? { ...u, ...data } : u))
-                    : [...prev, data];
-                });
+            await stopAdvertising();
+            await new Promise((r) => setTimeout(r, 500));
+
+            console.log('🔍 About to start BLE scan...');
+            await startScanning((data) => {
+              setDetectedUsers((prev) => {
+                const exists = prev.find((u) => u.uuid === data.uuid);
+                return exists
+                  ? prev.map((u) => (u.uuid === data.uuid ? { ...u, ...data } : u))
+                  : [...prev, data];
               });
+            });
 
-              console.log('🚀 Broadcasting and scanning started');
-            } catch (e) {
-              console.warn('⚠️ BLE error during init:', e);
-            } finally {
-              setBleBusy(false);
-            }
+            console.log('🚀 BLE cycle completed successfully');
+          } catch (e) {
+            console.warn('⚠️ BLE cycle error:', e);
+          } finally {
+            setBleBusy(false);
           }
         };
 
-        waitForHeading();
+        setInterval(blePeriodicCycle, 3000);
       }
     };
 
