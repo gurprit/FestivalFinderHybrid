@@ -1,4 +1,3 @@
-// Scanner.ts
 import { BleManager } from 'react-native-ble-plx';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Buffer } from 'buffer';
@@ -54,10 +53,6 @@ export async function startScanning(
   isScanning = true;
 
   try {
-    // 👉 Fully recreate the BleManager before scanning
-    bleManager.destroy();
-    bleManager = new BleManager();
-
     bleManager.startDeviceScan(null, { allowDuplicates: true }, (error, device) => {
       if (error) {
         console.error('❌ Scan error callback:', error.message);

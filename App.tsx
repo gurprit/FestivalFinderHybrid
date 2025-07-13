@@ -22,7 +22,6 @@ function MainScreen() {
   const [nickname, setNickname] = useState('');
   const [heading, setHeading] = useState<number | null>(null);
   const [headingSupported, setHeadingSupported] = useState(true);
-  const [bleBusy, setBleBusy] = useState(false);
 
   useBluetoothPermissions();
 
@@ -47,6 +46,8 @@ function MainScreen() {
   };
 
   useEffect(() => {
+    let broadcastInterval: NodeJS.Timeout | null = null;
+
     const loadAndStart = async () => {
       const storedUuid = await AsyncStorage.getItem('@user_uuid');
       const storedNickname = await AsyncStorage.getItem('@nickname');
@@ -64,48 +65,30 @@ function MainScreen() {
           console.error('❌ Failed to set companyId:', err);
         }
 
-        const blePeriodicCycle = async () => {
-          if (bleBusy) {
-            console.log('⏳ BLE cycle still running, skipping this interval');
-            return;
-          }
+        await startScanning((data) => {
+          setDetectedUsers((prev) => {
+            const exists = prev.find((u) => u.uuid === data.uuid);
+            return exists
+              ? prev.map((u) => (u.uuid === data.uuid ? { ...u, ...data } : u))
+              : [...prev, data];
+          });
+        });
 
-          setBleBusy(true);
+        console.log('🔎 Continuous scanning started');
+
+        broadcastInterval = setInterval(async () => {
+          const headingToSend = headingSupported ? heading ?? 0 : 0;
+          console.log('🧭 Periodic broadcast with heading:', headingToSend);
+
           try {
-            console.log('🔔 BLE cycle starting');
-
-            await stopScanning();
-            console.log('⏳ Waiting extra 1000ms after stopScanning');
-            await new Promise((r) => setTimeout(r, 1000));
-
-            const headingToSend = headingSupported ? heading ?? 0 : 0;
-            console.log('🧭 Heading used in cycle:', headingToSend);
-
             await safeStartBroadcasting(storedNickname, storedUuid, headingToSend);
             await new Promise((r) => setTimeout(r, 500));
-
             await stopAdvertising();
-            await new Promise((r) => setTimeout(r, 500));
-
-            console.log('🔍 About to start BLE scan...');
-            await startScanning((data) => {
-              setDetectedUsers((prev) => {
-                const exists = prev.find((u) => u.uuid === data.uuid);
-                return exists
-                  ? prev.map((u) => (u.uuid === data.uuid ? { ...u, ...data } : u))
-                  : [...prev, data];
-              });
-            });
-
-            console.log('🚀 BLE cycle completed successfully');
+            console.log('📡 Broadcast cycle complete');
           } catch (e) {
-            console.warn('⚠️ BLE cycle error:', e);
-          } finally {
-            setBleBusy(false);
+            console.warn('⚠️ Broadcast error in periodic cycle:', e);
           }
-        };
-
-        setInterval(blePeriodicCycle, 3000);
+        }, 3000);
       }
     };
 
@@ -113,8 +96,9 @@ function MainScreen() {
 
     return () => {
       stopScanning();
+      if (broadcastInterval) clearInterval(broadcastInterval);
     };
-  }, [heading, headingSupported]);
+  }, []);  // ✅ FIX: dependency array is now empty — runs only once on mount
 
   useEffect(() => {
     let subscription: any;
