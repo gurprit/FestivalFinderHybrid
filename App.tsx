@@ -9,13 +9,14 @@ import { startScanning, stopScanning } from './src/ble/Scanner';
 import useBluetoothPermissions from './src/hooks/useBluetoothPermissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RadarView from './src/components/RadarView';
+import BridgefyTestScreen from './src/screens/BridgefyTestScreen';
 
 import { filter, map } from 'rxjs/operators';
 import BleAdvertiser from 'react-native-ble-advertiser';
 
 const Stack = createNativeStackNavigator();
 
-function MainScreen() {
+function MainScreen({ navigation }) {
   const [detectedUsers, setDetectedUsers] = useState([]);
   const [friends, setFriends] = useState([]);
   const [uuid, setUuid] = useState('');
@@ -190,6 +191,7 @@ function MainScreen() {
 
   return (
     <View style={{ flex: 1, padding: 20, backgroundColor: 'black' }}>
+      <Button title="Bridgefy Test" onPress={() => navigation.navigate('BridgefyTest')} />
       <Text style={{ color: 'lime', fontSize: 16, marginBottom: 10 }}>
         🧍 You: {nickname || 'Unknown'} ({uuid || 'No UUID'})
       </Text>
@@ -257,6 +259,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: true, headerStyle: { backgroundColor: 'black' }, headerTintColor: 'lime' }}>
         <Stack.Screen name="FestivalFinder" component={MainScreen} />
+        <Stack.Screen name="BridgefyTest" component={BridgefyTestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
